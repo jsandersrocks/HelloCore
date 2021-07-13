@@ -34,7 +34,7 @@ steps:
     
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '<Azure service connection>'
-    appName: '<Name of web app>'
+    azureSubscription: 'Jsanders Cases Microsoft Azure Internal Consumption (da709071-45fd-474b-85fe-145cd5db6e64)'
+    appName: 'jsanderstestdevops'
     appType: webApp
     package: $(System.DefaultWorkingDirectory)/**/*.zip     
