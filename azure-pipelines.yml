@@ -19,10 +19,19 @@ steps:
     version: 5.0.x
     performMultiLevelLookup: true
     includePreviewVersions: true # Required for preview versions
-    
-- script: dotnet build --configuration $(buildConfiguration)
+
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration)'
-  # ...
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'jsanderstestdevops'
+
 # do this after you've built your app, near the end of your pipeline in most cases
 # for example, you do this before you deploy to an Azure web app on Windows
 - task: DotNetCoreCLI@2
@@ -31,10 +40,9 @@ steps:
     publishWebProjects: True
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: True
-    
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'Jsanders Cases Microsoft Azure Internal Consumption (da709071-45fd-474b-85fe-145cd5db6e64)'
     appName: 'jsanderstestdevops'
     appType: webApp
-    package: $(System.DefaultWorkingDirectory)/**/*.zip     
+    package: $(Build.ArtifactStagingDirectory)/**/*.zip     
